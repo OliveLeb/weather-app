@@ -3,8 +3,10 @@
     <main :class="[weather && weather.current.temp_c > 20 ? 'warm' : null]">
       <div>
 
+        <LangSelect />
+
         <div class="search-box">
-          <input type="text" class="search-bar" placeholder="Search..." v-model="query" @keypress="fetchWeather">
+          <input type="text" class="search-bar" :placeholder="t('home.search')" v-model="query" @keypress="fetchWeather">
         </div>
 
         <template v-if="weather">
@@ -40,28 +42,30 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import { ref, watch } from 'vue'
+import { usePreferredLanguages } from '@vueuse/core'
+import { useWeather } from './composables/useWeather';
+import LangSelect from './components/LangSelect.vue';
 
-import { ref} from 'vue'
+const languages = usePreferredLanguages()
 
-const API_KEY = '0c40b5086f464c63a7003902211411';
-const url_base = 'https://api.weatherapi.com/v1/forecast.json'
+const { locale, t } = useI18n()
+locale.value = languages.value[0]
 
 const query = ref<String>('');
 const weather = ref()
 
+watch(locale, async ()=> {
+  if(!query.value) return
+  weather.value = await useWeather(query.value, locale.value)
+})
+
 const fetchWeather = async (e:KeyboardEvent) => {
   if(e.key != 'Enter') return
 
-  try {
-    const response = await fetch(`${url_base}?key=${API_KEY}&q=${query.value}&aqi=yes&alerts=yes&lang=en`)
-    const data = await response.json()
-    weather.value = data
-  }
-  catch(error) {
-    console.log('Error happened here!')
-    console.error(error)
-  }
- 
+  weather.value = await useWeather(query.value, locale.value)
+
 }
 const dateBuilder  = ():String => {
   let d = new Date();
@@ -81,6 +85,7 @@ const dateBuilder  = ():String => {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  list-style: none;
 }
 body {
   font-family: 'montserrat', sans-serif;
@@ -163,4 +168,10 @@ main>div {
   font-style: italic;
   text-shadow: 3px 6px rgba(0, 0, 0, 0.25);
 }
+.lang-switch {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+}
 </style>
+
