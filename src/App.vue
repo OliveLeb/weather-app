@@ -36,7 +36,7 @@
 
         </template>
 
-        <TheFooter :timeAgo="timeAgo" />
+        <!-- <TheFooter :timeAgo="timeAgo" /> -->
       </div>
     </main>
 

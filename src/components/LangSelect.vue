@@ -12,7 +12,7 @@ const toggleLocales = (e: any) => {
 }
 
 const showLang = (): void => {
-  document.querySelector('.lang-ctn').classList.toggle('show')
+  document.querySelector('.lang-ctn')!.classList.toggle('show')
 }
 
 </script>
