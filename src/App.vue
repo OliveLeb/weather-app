@@ -36,6 +36,7 @@
 
         </template>
 
+        <TheFooter :timeAgo="timeAgo" />
       </div>
     </main>
 
@@ -47,6 +48,8 @@ import { ref, watch } from 'vue'
 import { usePreferredLanguages } from '@vueuse/core'
 import { useWeather } from './composables/useWeather';
 import LangSelect from './components/LangSelect.vue';
+import { useTimeAgo } from '@vueuse/core';
+import TheFooter from './components/TheFooter.vue';
 
 const languages = usePreferredLanguages()
 
@@ -55,18 +58,23 @@ locale.value = languages.value[0]
 
 const query = ref<String>('');
 const weather = ref()
+const timeAgo = ref()
 
 watch(locale, async ()=> {
   if(!query.value) return
   weather.value = await useWeather(query.value, locale.value)
+  const time = useTimeAgo(Date.now())
+  timeAgo.value = time.value
+  
 })
 
 const fetchWeather = async (e:KeyboardEvent) => {
   if(e.key != 'Enter') return
-
   weather.value = await useWeather(query.value, locale.value)
-
+  const time = useTimeAgo(Date.now())
+  timeAgo.value = time.value
 }
+
 const dateBuilder  = ():String => {
   let d = new Date();
   let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -106,6 +114,7 @@ main>div {
   min-height: 100vh;
   padding: 25px;
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.75));
+  position: relative;
 }
 .search-box {
   width: 100%;
@@ -168,10 +177,6 @@ main>div {
   font-style: italic;
   text-shadow: 3px 6px rgba(0, 0, 0, 0.25);
 }
-.lang-switch {
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.5);
-}
+
 </style>
 

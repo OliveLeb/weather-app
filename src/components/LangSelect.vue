@@ -8,9 +8,10 @@ const toggleLocales = (e: any) => {
   const locales = availableLocales
   if(!locales.includes(e.target.dataset.lang)) return
   locale.value = e.target.dataset.lang
+  showLang()
 }
 
-const showLang = () => {
+const showLang = (): void => {
   document.querySelector('.lang-ctn').classList.toggle('show')
 }
 
@@ -55,17 +56,15 @@ section {
 }
 .lang-ctn {
   display: flex;
-  /* justify-content: end; */
   position: absolute;
-  right:-110px;
+  right:-135px;
   transition: transform 1s ease;
 }
 button {
   border: none;
   background:transparent;
   cursor: pointer;
-}
-.lang-switch {
+  color: rgba(255, 255, 255, 0.5);
   margin-right: 10px;
 }
 .lang ul {
@@ -75,7 +74,7 @@ li {
   margin: 0 10px;
 }
 .show {
-  transform: translateX(-110px);
+  transform: translateX(-120px);
 }
 .hidden {
   display: none;
