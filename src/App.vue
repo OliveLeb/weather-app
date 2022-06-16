@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { ref, watch } from 'vue'
-import { usePreferredLanguages } from '@vueuse/core'
+import { usePreferredLanguages, useDebounce } from '@vueuse/core'
 import { useWeather } from './composables/useWeather';
 import LangSelect from './components/LangSelect.vue';
 // import { useTimeAgo } from '@vueuse/core';
@@ -57,6 +57,7 @@ const { locale, t } = useI18n()
 locale.value = languages.value[0]
 
 const query = ref<String>('');
+const debouncedQuery = useDebounce(query, 400);
 const weather = ref()
 const timeAgo = ref()
 
@@ -66,6 +67,11 @@ watch(locale, async ()=> {
   // const time = useTimeAgo(Date.now())
   // timeAgo.value = time.value
   
+})
+
+watch(debouncedQuery, async () => {
+  if(!debouncedQuery.value) return
+  weather.value = await useWeather(debouncedQuery.value, locale.value)
 })
 
 const fetchWeather = async (e:KeyboardEvent) => {
