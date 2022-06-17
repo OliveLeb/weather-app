@@ -14,4 +14,5 @@ export const useWeather = async (query: String, lang: String) => {
     console.log('Error happened here!')
     console.error(error)
   }
+
 }

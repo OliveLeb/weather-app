@@ -1,9 +1,9 @@
 <template>
 
+
     <main :class="[weather && weather.current.temp_c > 20 ? 'warm' : null]">
       <div>
-
-        <LangSelect />
+        <TheHeader :weather="weather" @refresh="refresh"/>
 
         <div class="search-box">
           <input type="text" class="search-bar" :placeholder="t('home.search')" v-model="query" @keypress="fetchWeather">
@@ -16,7 +16,7 @@
               <p>{{ weather.location.name }}, </p>
               <p>{{ weather.location.country }}</p>
             </div>
-            <div class="date"> {{  weather.location.localtime }} </div>
+            <div class="date"> {{  date }} </div>
           </div>
 
           <div class="weather-box">
@@ -44,12 +44,12 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { usePreferredLanguages, useDebounce } from '@vueuse/core'
 import { useWeather } from './composables/useWeather';
-import LangSelect from './components/LangSelect.vue';
 // import { useTimeAgo } from '@vueuse/core';
 import TheFooter from './components/TheFooter.vue';
+import TheHeader from './components/TheHeader.vue';
 
 const languages = usePreferredLanguages()
 
@@ -59,7 +59,12 @@ locale.value = languages.value[0]
 const query = ref<String>('');
 const debouncedQuery = useDebounce(query, 400);
 const weather = ref()
-const timeAgo = ref()
+const timeAgo = ref("")
+
+const date = computed(() => {
+  if(!weather.value) return
+  return new Intl.DateTimeFormat([locale.value, 'en'], { dateStyle: 'full', timeStyle: 'short' }).format(weather.value.location.localtime_epoch * 1000)
+})
 
 watch(locale, async ()=> {
   if(!query.value) return
@@ -70,7 +75,7 @@ watch(locale, async ()=> {
 })
 
 watch(debouncedQuery, async () => {
-  if(!debouncedQuery.value) return
+  if(!debouncedQuery.value) return weather.value = null;
   weather.value = await useWeather(debouncedQuery.value, locale.value)
 })
 
@@ -81,15 +86,9 @@ const fetchWeather = async (e:KeyboardEvent) => {
   // timeAgo.value = time.value
 }
 
-const dateBuilder  = ():String => {
-  let d = new Date();
-  let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  let day = days[d.getDay()];
-  let date = d.getDate();
-  let month = months[d.getMonth()];
-  let year = d.getFullYear();
-  return `${day} ${date} ${month} ${year}`;
+const refresh = async () => {
+  if(!query.value) return
+  weather.value = await useWeather(query.value, locale.value)
 }
 
 </script>
