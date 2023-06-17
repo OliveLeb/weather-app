@@ -1,6 +1,6 @@
 {
-  "type": "module",
   "name": "weather-app",
+  "type": "module",
   "version": "1.1.0",
   "packageManager": "pnpm@8.6.2",
   "scripts": {
