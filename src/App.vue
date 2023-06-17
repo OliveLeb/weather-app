@@ -5,16 +5,16 @@ import { usePreferredLanguages } from '@vueuse/core'
 import { useWeather } from './composables/useWeather'
 
 // import { useTimeAgo } from '@vueuse/core';
+import SearchBar from './components/SearchBar.vue'
 import TheFooter from './components/TheFooter.vue'
 import TheHeader from './components/TheHeader.vue'
 
 const languages = usePreferredLanguages()
 
-const { locale, t } = useI18n()
+const { locale } = useI18n()
 locale.value = languages.value[0]
 
 const { weather, query, fetchWeather } = useWeather()
-console.log(weather.value)
 
 const timeAgo = ref('')
 
@@ -30,9 +30,7 @@ const date = computed(() => {
     <div>
       <TheHeader :weather="weather" @refresh="fetchWeather" />
 
-      <div class="search-box">
-        <input v-model="query" type="text" class="search-bar" :placeholder="t('home.search')" @keypress.enter="fetchWeather">
-      </div>
+      <SearchBar v-model="query" @submit="fetchWeather" />
 
       <template v-if="weather">
         <div v-if="weather" class="weather-wrap">
@@ -52,7 +50,7 @@ const date = computed(() => {
             </div>
 
             <div class="weather">
-              <img :src="weather.current.condition.icon" alt="">
+              <img :src="weather.current.condition.icon" :alt="weather.current.condition.text" class="m-auto">
               <p>{{ weather.current.condition.text }} </p>
             </div>
           </div>
@@ -69,16 +67,6 @@ const date = computed(() => {
 </template>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  list-style: none;
-}
-body {
-  font-family: 'montserrat', sans-serif;
-  background: #191919;
-}
 main {
   background-image: url('./assets/images/cold-bg.jpg');
   background-size: cover;
@@ -95,31 +83,6 @@ main>div {
   padding: 25px;
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.75));
   position: relative;
-}
-.search-box {
-  width: 100%;
-  margin-bottom: 30px;
-}
-.search-box .search-bar {
-  display: block;
-  width: 100%;
-  padding: 15px;
-
-  color: #313131;
-  font-size: 20px;
-  appearance: none;
-  border:none;
-  outline: none;
-  background: none;
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
-  background-color: rgba(255, 255, 255, 0.5);
-  border-radius: 0px 16px 0px 16px;
-  transition: 0.4s;
-}
-.search-box .search-bar:focus {
-  box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.25);
-  background-color: rgba(255, 255, 255, 0.75);
-  border-radius: 16px 0px 16px 0px;
 }
 .location-box .location {
   color: #FFF;

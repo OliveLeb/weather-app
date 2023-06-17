@@ -7,13 +7,13 @@ defineEmits(['refresh'])
 
 <template>
   <header class="flex justify-between items-center mb-4 overflow-hidden h-12 relative">
-    <div v-if="weather" class="i-carbon-renew cursor-pointer" @click="$emit('refresh')" />
+    <i v-if="weather" class="i-carbon-renew cursor-pointer text-white/80" aria-hidden="true" @click="$emit('refresh')" />
 
     <!-- <button> -->
     <!-- <span class="i-carbon-sun" /> -->
     <!-- <span class="i-carbon-moon" /> -->
     <!-- </button> -->
 
-    <LangSelect class="absolute right-0" />
+    <LangSelect class="absolute" />
   </header>
 </template>
