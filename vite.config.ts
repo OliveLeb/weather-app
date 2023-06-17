@@ -1,21 +1,27 @@
+import path from 'node:path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import vueI18n from '@intlify/vite-plugin-vue-i18n'
-import path from 'path'
+import VueI18n from '@intlify/unplugin-vue-i18n/vite'
 import Unocss from 'unocss/vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   resolve: {
     alias: {
-      'vue-i18n': 'vue-i18n/dist/vue-i18n.runtime.esm-bundler.js',
+      '~': `${path.resolve(__dirname, 'src')}/`,
     },
   },
   plugins: [
     vue(),
-    vueI18n({
+
+    // https://github.com/intlify/bundle-tools/tree/main/packages/unplugin-vue-i18n
+    VueI18n({
+      runtimeOnly: true,
+      compositionOnly: true,
+      fullInstall: true,
       include: path.resolve(__dirname, 'src/locales/**'),
     }),
-    Unocss()
+
+    Unocss(),
   ],
 })

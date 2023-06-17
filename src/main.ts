@@ -4,5 +4,5 @@ import i18n from './i18n'
 import 'uno.css'
 
 createApp(App)
-.use(i18n)
-.mount('#app')
+  .use(i18n)
+  .mount('#app')

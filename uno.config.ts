@@ -1,7 +1,7 @@
 import {
   defineConfig,
+  presetIcons,
   presetUno,
-  presetIcons
 } from 'unocss'
 
 export default defineConfig({
@@ -10,6 +10,6 @@ export default defineConfig({
     presetIcons({
       scale: 1.5,
       warn: true,
-    })
-  ]
+    }),
+  ],
 })
