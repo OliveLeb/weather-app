@@ -1,29 +1,57 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import { computed, ref } from 'vue'
+import { usePreferredLanguages } from '@vueuse/core'
+import { useWeather } from './composables/useWeather'
+
+// import { useTimeAgo } from '@vueuse/core';
+import TheFooter from './components/TheFooter.vue'
+import TheHeader from './components/TheHeader.vue'
+
+const languages = usePreferredLanguages()
+
+const { locale, t } = useI18n()
+locale.value = languages.value[0]
+
+const { weather, query, fetchWeather } = useWeather()
+console.log(weather.value)
+
+const timeAgo = ref('')
+
+const date = computed(() => {
+  if (!weather.value)
+    return
+  return new Intl.DateTimeFormat([locale.value, 'en'], { dateStyle: 'full', timeStyle: 'short' }).format(weather.value.location.localtime_epoch * 1000)
+})
+</script>
+
 <template>
+  <main :class="[weather && weather.current.temp_c > 20 ? 'warm' : null]">
+    <div>
+      <TheHeader :weather="weather" @refresh="fetchWeather" />
 
+      <div class="search-box">
+        <input v-model="query" type="text" class="search-bar" :placeholder="t('home.search')" @keypress.enter="fetchWeather">
+      </div>
 
-    <main :class="[weather && weather.current.temp_c > 20 ? 'warm' : null]">
-      <div>
-        <TheHeader :weather="weather" @refresh="refresh"/>
-
-        <div class="search-box">
-          <input type="text" class="search-bar" :placeholder="t('home.search')" v-model="query" @keypress="fetchWeather">
-        </div>
-
-        <template v-if="weather">
-        <div class="weather-wrap" v-if="weather">
+      <template v-if="weather">
+        <div v-if="weather" class="weather-wrap">
           <div class="location-box">
-            <div class="location"> 
+            <div class="location">
               <p>{{ weather.location.name }}, </p>
               <p>{{ weather.location.country }}</p>
             </div>
-            <div class="date"> {{  date }} </div>
+            <div class="date">
+              {{ date }}
+            </div>
           </div>
 
           <div class="weather-box">
-            <div class="temp">  {{ Math.round(weather.current.temp_c) }}°c </div>
+            <div class="temp">
+              {{ Math.round(weather.current.temp_c) }}°c
+            </div>
 
-            
-            <div class="weather"> 
+            <div class="weather">
               <img :src="weather.current.condition.icon" alt="">
               <p>{{ weather.current.condition.text }} </p>
             </div>
@@ -33,65 +61,12 @@
         <div v-else>
           {{ weather.message }}
         </div>
+      </template>
 
-        </template>
-
-        <TheFooter :timeAgo="timeAgo" />
-      </div>
-    </main>
-
+      <TheFooter :time-ago="timeAgo" />
+    </div>
+  </main>
 </template>
-
-<script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { ref, watch, computed } from 'vue'
-import { usePreferredLanguages, useDebounce } from '@vueuse/core'
-import { useWeather } from './composables/useWeather';
-// import { useTimeAgo } from '@vueuse/core';
-import TheFooter from './components/TheFooter.vue';
-import TheHeader from './components/TheHeader.vue';
-
-const languages = usePreferredLanguages()
-
-const { locale, t } = useI18n()
-locale.value = languages.value[0]
-
-const query = ref<String>('');
-const debouncedQuery = useDebounce(query, 400);
-const weather = ref()
-const timeAgo = ref("")
-
-const date = computed(() => {
-  if(!weather.value) return
-  return new Intl.DateTimeFormat([locale.value, 'en'], { dateStyle: 'full', timeStyle: 'short' }).format(weather.value.location.localtime_epoch * 1000)
-})
-
-watch(locale, async ()=> {
-  if(!query.value) return
-  weather.value = await useWeather(query.value, locale.value)
-  // const time = useTimeAgo(Date.now())
-  // timeAgo.value = time.value
-  
-})
-
-watch(debouncedQuery, async () => {
-  if(!debouncedQuery.value) return weather.value = null;
-  weather.value = await useWeather(debouncedQuery.value, locale.value)
-})
-
-const fetchWeather = async (e:KeyboardEvent) => {
-  if(e.key != 'Enter') return
-  weather.value = await useWeather(query.value, locale.value)
-  // const time = useTimeAgo(Date.now())
-  // timeAgo.value = time.value
-}
-
-const refresh = async () => {
-  if(!query.value) return
-  weather.value = await useWeather(query.value, locale.value)
-}
-
-</script>
 
 <style>
 * {
@@ -129,7 +104,7 @@ main>div {
   display: block;
   width: 100%;
   padding: 15px;
-  
+
   color: #313131;
   font-size: 20px;
   appearance: none;
@@ -182,6 +157,4 @@ main>div {
   font-style: italic;
   text-shadow: 3px 6px rgba(0, 0, 0, 0.25);
 }
-
 </style>
-
