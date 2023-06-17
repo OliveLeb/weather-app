@@ -19,7 +19,7 @@ export default defineConfig({
       runtimeOnly: true,
       compositionOnly: true,
       fullInstall: true,
-      include: path.resolve(__dirname, 'src/locales/**'),
+      include: [path.resolve(__dirname, 'src/locales/**')],
     }),
 
     Unocss(),

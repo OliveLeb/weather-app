@@ -1,10 +1,11 @@
 import { readonly, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import type { WeatherData } from './types'
 
 const API_KEY = import.meta.env.VITE_WEATHER_API_KEY
 const url_base = import.meta.env.VITE_WEATHER_URL
 
-const data = ref(null)
+const data = ref<WeatherData | null>(null)
 const query = ref('')
 const lang = ref('')
 

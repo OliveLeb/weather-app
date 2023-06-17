@@ -19,21 +19,24 @@ const { weather, query, fetchWeather } = useWeather()
 const timeAgo = ref('')
 
 const date = computed(() => {
-  if (!weather.value)
+  if (!weather.value || weather.value.error)
     return
   return new Intl.DateTimeFormat([locale.value, 'en'], { dateStyle: 'full', timeStyle: 'short' }).format(weather.value.location.localtime_epoch * 1000)
 })
 </script>
 
 <template>
-  <main :class="[weather && weather.current.temp_c > 20 ? 'warm' : null]">
+  <main :class="[weather?.current && weather.current.temp_c > 20 ? 'warm' : null]">
     <div>
       <TheHeader :weather="weather" @refresh="fetchWeather" />
 
       <SearchBar v-model="query" @submit="fetchWeather" />
 
       <template v-if="weather">
-        <div v-if="weather" class="weather-wrap">
+        <div v-if="weather.error">
+          {{ weather.error.message }}
+        </div>
+        <div v-else class="weather-wrap">
           <div class="location-box">
             <div class="location">
               <p>{{ weather.location.name }}, </p>
@@ -54,10 +57,6 @@ const date = computed(() => {
               <p>{{ weather.current.condition.text }} </p>
             </div>
           </div>
-        </div>
-
-        <div v-else>
-          {{ weather.message }}
         </div>
       </template>
 
