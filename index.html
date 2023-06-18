@@ -5,9 +5,17 @@
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Weather App</title>
+    <script>
+      (function () {
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        const setting = localStorage.getItem('vueuse-color-scheme') || 'auto'
+        if (setting === 'dark' || (prefersDark && setting !== 'light'))
+          document.documentElement.classList.toggle('dark', true)
+      })()
+    </script>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app" class="font-quicksand bg-slate-100 text-zinc-800 dark:bg-zinc-800 dark:text-slate-100"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

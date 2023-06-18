@@ -1,2 +1,8 @@
 home:
   search: Rechercher une ville..
+
+weather:
+  feelslike: Ressenti
+  humidity: Humidité
+  wind: Vent
+  now: Maintenant

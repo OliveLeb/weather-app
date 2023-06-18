@@ -20,7 +20,7 @@ function showLang(): void {
 </script>
 
 <template>
-  <div class="flex items-center -right-[88px] transition-transform duration-1000 text-white/80" :class="{ 'show -translate-x-[88px]': show }">
+  <div class="flex items-center -mr-[88px] transition-transform duration-1000 darkmode-color" :class="{ 'show -translate-x-[88px]': show }">
     <i class="i-carbon-translate cursor-pointer" aria-hidden="true" @click="showLang" />
     <div>
       <ul class="flex">

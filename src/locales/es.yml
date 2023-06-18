@@ -1,2 +1,8 @@
 home:
   search: Buscar una ciudad..
+
+weather:
+  feelslike: Sensación
+  humidity: Humedad
+  wind: Viento
+  now: Ahora
