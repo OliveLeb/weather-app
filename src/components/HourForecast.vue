@@ -33,11 +33,35 @@ function formatHour(date) {
 </script>
 
 <template>
-  <div class="flex divide-x">
-    <div v-for="day in forcastStartingNow" :key="day.time_epoch" class="p-1 grow text-center">
-      <span>{{ formatHour(day.time_epoch * 1000) }}</span>
-      <img :src="day.condition.icon" :alt="day.condition.text" class="m-auto">
-      {{ Math.round(day.temp_c) }} °c
+  <div v-show="forcastStartingNow.length > 0" class="border-t border-slate-200 dark:border-zinc-800/50 pt-4">
+    <h4 class="w-full">
+      {{ t('weather.forecastday') }}
+    </h4>
+    <div class="flex divide-x overflow-auto hourforecast pb-2">
+      <div v-for="day in forcastStartingNow" :key="day.time_epoch" class="p-1 grow text-center min-w-[6rem]">
+        <span>{{ formatHour(day.time_epoch * 1000) }}</span>
+        <img :src="day.condition.icon" :alt="day.condition.text" class="m-auto">
+        {{ Math.round(day.temp_c) }} °c
+      </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.hourforecast::-webkit-scrollbar-track
+{
+  /* -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,0.3); */
+  background-color: rgba(0,0,0,0.5);
+}
+
+.hourforecast::-webkit-scrollbar
+{
+  height: 4px;
+  background-color: rgba(255,255,255,1);
+}
+
+.hourforecast::-webkit-scrollbar-thumb
+{
+  background-color: rgba(39,39,42, 1);
+}
+</style>

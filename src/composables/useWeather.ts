@@ -15,7 +15,7 @@ async function getWeather() {
 
   try {
     const response = await fetch(
-      `${url_base}?key=${API_KEY}&q=${query.value}&lang=${lang.value}`,
+      `${url_base}?key=${API_KEY}&days=5&q=${query.value}&lang=${lang.value}`,
     )
     return await response.json()
   }

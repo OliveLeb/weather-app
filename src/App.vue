@@ -7,6 +7,7 @@ import SearchBar from './components/SearchBar.vue'
 import TheFooter from './components/TheFooter.vue'
 import TheHeader from './components/TheHeader.vue'
 import DayWeather from './components/DayWeather.vue'
+import ForecastDay from '~/components/ForecastDay.vue'
 
 const languages = usePreferredLanguages()
 
@@ -28,6 +29,8 @@ const { weather, query, fetchWeather } = useWeather()
             {{ weather.error.message }}
           </div>
           <DayWeather v-else :weather="weather" :lang="locale" />
+
+          <ForecastDay v-if="weather.forecast" :forecastday="weather.forecast.forecastday" :lang="locale" />
         </template>
       </div>
     </main>

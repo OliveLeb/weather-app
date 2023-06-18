@@ -6,3 +6,5 @@ weather:
   humidity: Humidity
   wind: Wind
   now: Now
+  forecastday: Daily forecast
+  nextdays: Next days

@@ -6,3 +6,5 @@ weather:
   humidity: Humidité
   wind: Vent
   now: Maintenant
+  forecastday: Prévision journalière
+  nextdays: Prochains jours

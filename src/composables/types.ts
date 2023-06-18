@@ -21,4 +21,16 @@ export interface WeatherData {
     country: string
     localtime_epoch: number
   }
+
+  forecast: {
+    forecastday: any
+  }
+}
+
+export interface forecastday {
+  astro: object
+  date: string
+  date_epoch: number
+  day: object
+  hour: any
 }

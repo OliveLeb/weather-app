@@ -6,3 +6,5 @@ weather:
   humidity: Humedad
   wind: Viento
   now: Ahora
+  forecastday: Pronostico diario
+  nextdays: Proximos dias
