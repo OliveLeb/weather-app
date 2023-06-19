@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { usePreferredLanguages } from '@vueuse/core'
 import { useWeather } from './composables/useWeather'
 
 import SearchBar from './components/SearchBar.vue'
@@ -9,10 +8,7 @@ import TheHeader from './components/TheHeader.vue'
 import DayWeather from './components/DayWeather.vue'
 import ForecastDay from '~/components/ForecastDay.vue'
 
-const languages = usePreferredLanguages()
-
 const { locale } = useI18n()
-locale.value = languages.value[0]
 
 const { weather, query, fetchWeather } = useWeather()
 </script>

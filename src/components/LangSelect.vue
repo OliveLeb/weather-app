@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import { usePreferredLanguages } from '@vueuse/core'
 import { ref } from 'vue'
 
 const { locale, availableLocales } = useI18n()
+
+const languages = usePreferredLanguages()
+locale.value = languages.value[0]
 
 const show = ref(false)
 
@@ -24,17 +28,17 @@ function showLang(): void {
     <i class="i-carbon-translate cursor-pointer" aria-hidden="true" @click="showLang" />
     <div>
       <ul class="flex">
-        <li v-if="locale !== 'en'" class="my-0 mx-2">
+        <li v-if="!locale.includes('en')" class="my-0 mx-2">
           <button class="border-0 bg-transparent color-white/50" @click="toggleLocales">
             <img src="../assets/logo/en.svg" alt="" data-lang="en">
           </button>
         </li>
-        <li v-if="locale !== 'fr'" class="my-0 mx-2">
+        <li v-if="!locale.includes('fr')" class="my-0 mx-2">
           <button class="border-0 bg-transparent color-white/50" @click="toggleLocales">
             <img src="../assets/logo/fr.svg" alt="" data-lang="fr">
           </button>
         </li>
-        <li v-if="locale !== 'es'" class="my-0 mx-2">
+        <li v-if="!locale.includes('es')" class="my-0 mx-2">
           <button class="border-0 bg-transparent color-white/50" @click="toggleLocales">
             <img src="../assets/logo/es.svg" alt="" data-lang="es">
           </button>

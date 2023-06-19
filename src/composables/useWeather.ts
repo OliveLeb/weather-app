@@ -1,4 +1,4 @@
-import { readonly, ref, watch } from 'vue'
+import { onBeforeMount, readonly, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { WeatherData } from './types'
 
@@ -36,6 +36,11 @@ export function useWeather() {
 
     data.value = await getWeather()
   }
+
+  onBeforeMount(async () => {
+    if (query.value.length > 0)
+      data.value = await getWeather()
+  })
 
   watch(locale, async () => {
     data.value = await getWeather()
