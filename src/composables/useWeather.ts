@@ -1,4 +1,4 @@
-import { onBeforeMount, readonly, ref, watch } from 'vue'
+import { onBeforeMount, onBeforeUnmount, readonly, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { WeatherData } from './types'
 
@@ -30,16 +30,16 @@ export function useWeather() {
   const { locale } = useI18n()
   lang.value = locale.value
 
-  async function fetchWeather(e: KeyboardEvent) {
-    if (e && e.key !== 'Enter')
-      return
-
+  async function fetchWeather() {
     data.value = await getWeather()
   }
 
   onBeforeMount(async () => {
     if (query.value.length > 0)
       data.value = await getWeather()
+  })
+  onBeforeUnmount(() => {
+    query.value = ''
   })
 
   watch(locale, async () => {
