@@ -36,10 +36,10 @@ export function useWeather() {
 
   onBeforeMount(async () => {
     if (query.value.length > 0)
-      data.value = await getWeather()
+      window.addEventListener('DOMContentLoaded', fetchWeather)
   })
   onBeforeUnmount(() => {
-    query.value = ''
+    window.removeEventListener('DOMContentLoaded', fetchWeather)
   })
 
   watch(locale, async () => {
