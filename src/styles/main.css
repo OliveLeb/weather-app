@@ -1,13 +1,7 @@
 body {
   font-family: 'montserrat', sans-serif;
-  /* background: #191919; */
-  /* background-color: rgb(241 245 249); */
   min-height: 100vh;
 }
-/* html.dark body {
-  background-color: ;
-  color: rgb(241 245 249);
-} */
 #app {
   min-height: 100vh;
 }

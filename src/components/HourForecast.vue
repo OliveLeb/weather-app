@@ -48,20 +48,32 @@ function formatHour(date) {
 </template>
 
 <style scoped>
-.hourforecast::-webkit-scrollbar-track
+html.dark.hourforecast::-webkit-scrollbar-track
 {
   /* -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,0.3); */
   background-color: rgba(0,0,0,0.5);
 }
-
-.hourforecast::-webkit-scrollbar
+html.dark .hourforecast::-webkit-scrollbar
 {
   height: 4px;
   background-color: rgba(255,255,255,1);
 }
-
-.hourforecast::-webkit-scrollbar-thumb
+html.dark .hourforecast::-webkit-scrollbar-thumb
 {
   background-color: rgba(39,39,42, 1);
+}
+
+.hourforecast::-webkit-scrollbar-track
+{
+  background-color: #ccc;
+}
+.hourforecast::-webkit-scrollbar
+{
+  height: 4px;
+  background-color: rgba(0,0,0,1);
+}
+.hourforecast::-webkit-scrollbar-thumb
+{
+  background-color: rgb(151, 151, 160);
 }
 </style>
